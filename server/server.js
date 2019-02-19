@@ -10,8 +10,18 @@ var Server = http.createServer(app);
 var io = SocketIO(Server);
 
 io.on('connection',(socket)=>{
-    console.log('User Connected');
 
+    socket.emit('newMessage',{
+        from:"Admin",
+        text:"Welcome to the Chat App",
+        createdAt: Date.now()
+    });
+    socket.broadcast.emit('newMessage',{
+        from:"Admin",
+        text:"New User Joined The Chat",
+        createdAt:Date.now()
+    })
+    
 socket.on('createMessage',function(message){
     io.emit('newMessage',{
         from:message.from,
@@ -21,6 +31,7 @@ socket.on('createMessage',function(message){
 
 });
 });
+
 Server.listen(PORT,()=>{
     console.log(`Server Started On Port ${PORT}.`);
 });
