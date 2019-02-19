@@ -9,8 +9,17 @@ app.use(express.static(publicPath));
 var Server = http.createServer(app);
 var io = SocketIO(Server);
 
-io.on('connection',()=>{
+io.on('connection',(socket)=>{
     console.log('User Connected');
+
+  var createdMessage
+
+socket.on('createMessage',function(message){
+    createdMessage = message;
+    createdMessage.createdAt =Date.now();
+    socket.emit('newMessage',createdMessage);
+});
+
 });
 
 Server.listen(PORT,()=>{
