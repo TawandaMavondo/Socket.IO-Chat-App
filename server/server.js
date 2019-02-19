@@ -12,16 +12,15 @@ var io = SocketIO(Server);
 io.on('connection',(socket)=>{
     console.log('User Connected');
 
-  var createdMessage
-
 socket.on('createMessage',function(message){
-    createdMessage = message;
-    createdMessage.createdAt =Date.now();
-    socket.emit('newMessage',createdMessage);
-});
+    io.emit('newMessage',{
+        from:message.from,
+        text:message.text,
+        completedAt:Date.now()
+    });
 
 });
-
+});
 Server.listen(PORT,()=>{
     console.log(`Server Started On Port ${PORT}.`);
 });
